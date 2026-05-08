@@ -54,6 +54,7 @@ architecture Behavioral of ALU is
    signal sum_result : std_logic_vector(7 downto 0);
    signal c1         : std_logic;
    signal cout       : std_logic;
+   
 
    
   
@@ -80,6 +81,8 @@ begin
 	
 	process(i_A, i_B, i_op, sum_result, cout)
 	   variable alu_result : std_logic_vector(7 downto 0);
+	   variable sub_temp   : unsigned(8 downto 0);
+	   
 	begin
 	
 	alu_result := (others => '0');
@@ -92,7 +95,8 @@ begin
         alu_result := sum_result;
         
        when "001" => 
-        alu_result := std_logic_vector(unsigned(i_A) + unsigned(not i_B) + 1);
+        sub_temp   := unsigned('0' & i_A) + unsigned('0' & not i_B) + 1;
+        alu_result := std_logic_vector(sub_temp(7 downto 0));
         
        when "010" => 
         alu_result := i_A AND i_B;
@@ -126,9 +130,13 @@ begin
 	
 	--flag is carry
 	
-	if (i_op = "000" or i_op = "001") then
+	if (i_op = "000") then
 	   --flag is carry
 	   o_flags(1) <= cout;
+	elsif (i_op = "001") then
+	   o_flags(1) <= sub_temp(8);
+	else
+	   o_flags(1) <= '0';
 	end if;
 	
 	--flag is overflow
