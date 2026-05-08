@@ -126,6 +126,7 @@ architecture top_basys3_arch of top_basys3 is
     constant SEG_MINUS : std_logic_vector(6 downto 0) := "1111110";
     constant SEG_BLANK : std_logic_vector(6 downto 0) := "1111111";
     signal w_seg_decoded : STD_LOGIC_VECTOR(6 downto 0);
+    signal w_an         : std_logic_vector(3 downto 0);
     
 
     
@@ -186,7 +187,7 @@ begin
 		      i_D1 		=> w_tens,
 		      i_D0 		=> w_ones,
 		      o_data	=> w_data,
-		      o_sel		=> an
+		      o_sel		=> w_an
         );
         
         uut6 : sevenseg_decoder
@@ -238,7 +239,8 @@ begin
 	
 	led(3 downto 0) <= w_cycle; 
 	
+	an <= w_an;
 	
-	seg <= w_sign_seg when an = "0111" else w_seg_decoded;
+	seg <= w_sign_seg when w_an = "0111" else w_seg_decoded;
 	
 end top_basys3_arch;
