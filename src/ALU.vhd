@@ -113,32 +113,32 @@ begin
 
 	
 	--for the flags negative, zero, carry, overflow
-	o_flags(0) <= alu_result(7);
+	o_flags(3) <= alu_result(7);
 	
 	
 	
 	if (alu_result = "00000000") then
 	   --flag is zero
-	   o_flags(1) <= '1';
+	   o_flags(2) <= '1';
 	else 
-	   o_flags(1) <= '0';
+	   o_flags(2) <= '0';
 	end if;
 	
 	--flag is carry
 	
 	if (i_op = "000" or i_op = "001") then
 	   --flag is carry
-	   o_flags(2) <= cout;
+	   o_flags(1) <= cout;
 	end if;
 	
 	--flag is overflow
 	if (i_op = "000") then
 	   --flag is carry
-	   o_flags(3) <= (i_A(7) XNOR i_B(7)) AND (i_A(7) XOR alu_result(7));
+	   o_flags(0) <= (i_A(7) XNOR i_B(7)) AND (i_A(7) XOR alu_result(7));
 	elsif i_op = "001" then 
-	   o_flags(3) <= (i_A(7) XOR i_B(7)) AND (i_A(7) XOR alu_result(7));
+	   o_flags(0) <= (i_A(7) XOR i_B(7)) AND (i_A(7) XOR alu_result(7));
 	else 
-	   o_flags(3) <= '0';
+	   o_flags(0) <= '0';
 	end if;
 	
     end process;
